@@ -7,7 +7,9 @@ Weather.prototype.fetchResults = async function (val) {
       ),
       parsedRes = await res.json(),
       data = parsedRes.data;
+
     this.updateSuggestions(data);
+
     window.addEventListener("click", () => {
       suggestions.innerHTML = "";
     });
@@ -26,6 +28,7 @@ Weather.prototype.onKeyup = function (e) {
 
 Weather.prototype.updatecitySelect = function ({ results, city }) {
   const chosenCity = results.find((el) => el.name === city);
+
   selectedCity.innerText = chosenCity.name;
   selectedWeather.innerText = chosenCity.weather;
   selectedStatus.innerText = chosenCity.status;
@@ -33,6 +36,7 @@ Weather.prototype.updatecitySelect = function ({ results, city }) {
 
 Weather.prototype.updateSuggestions = function (data) {
   let suggestionItem = document.createElement("div");
+
   suggestionItem.classList.add("suggestionItem");
   //remove all elements from suggestions
   suggestions.innerHTML = "";
