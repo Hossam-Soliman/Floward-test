@@ -11,10 +11,19 @@ Weather.prototype.fetchResults = async function (val) {
     let suggestionItem = document.createElement("div");
     suggestionItem.classList.add("suggestionItem");
 
+    //remove all elements from suggestions
+    suggestions.innerHTML = "";
     if (data.length === 0) {
       suggestionItem.classList.add("error");
       suggestionItem.innerText = "No Rsults";
       suggestions.appendChild(suggestionItem);
+    } else {
+      listItems = data.reduce((result, item) => {
+        result += `<div class="suggestionItem">${item.name}</div>`;
+
+        return result;
+      }, "");
+      suggestions.innerHTML = listItems;
     }
 
     console.log(parsedRes);
