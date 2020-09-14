@@ -1,17 +1,15 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link href="./css/style.css"  rel="stylesheet" type="text/css"/>
+    <link href="./css/style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
     <div class="margin20 textCenter fs20">The Weather Finder</div>
     <div class="wrap">
       <label class="db padB10 fb" for="city">Select a City: </label>
-      <input type="text"  placeholder="City Name" id="city" />
+      <input type="text" placeholder="City Name" id="city" />
       <div class="posRel">
-        <div id="suggestions" class="suggestions">
-          <div class="suggestionItem">No Info available!</div>
-        </div>
+        <div id="suggestions" class="suggestions"></div>
       </div>
       <div id="selectedCityInfo">
         <div>
@@ -28,7 +26,7 @@
         </div>
       </div>
       <div class="btnWrap">
-        <button type="button" id="resetBtn" >Reset</button>
+        <button type="button" id="resetBtn">Reset</button>
       </div>
     </div>
   </body>

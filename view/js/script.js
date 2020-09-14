@@ -1,19 +1,32 @@
 function Weather() {}
 
 Weather.prototype.fetchResults = async function (val) {
+  const suggestions = document.getElementById("suggestions");
   try {
     const res = await fetch(
         `https://jsonmock.hackerrank.com/api/weather?name=${val}`
       ),
-      data = await res.json();
-    console.log("mango", val, data);
+      parsedRes = await res.json(),
+      data = parsedRes.data;
+    let suggestionItem = document.createElement("div");
+    suggestionItem.classList.add("suggestionItem");
+
+    if (data.length === 0) {
+      suggestionItem.classList.add("error");
+      suggestionItem.innerText = "No Rsults";
+      suggestions.appendChild(suggestionItem);
+    }
+
+    console.log(parsedRes);
   } catch (err) {
     console.log(err);
   }
 };
 
+let timer;
 Weather.prototype.onKeyup = function (e) {
-  setTimeout(() => {
+  clearTimeout(timer);
+  timer = setTimeout(() => {
     this.fetchResults(e.target.value);
   }, 1000);
 };
