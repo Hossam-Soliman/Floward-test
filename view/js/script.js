@@ -1,29 +1,39 @@
 function Weather() {}
 
+let suggestionItem = document.createElement("div");
+suggestionItem.classList.add("suggestionItem");
 Weather.prototype.fetchResults = async function (val) {
-  const suggestions = document.getElementById("suggestions");
   try {
     const res = await fetch(
         `https://jsonmock.hackerrank.com/api/weather?name=${val}`
       ),
       parsedRes = await res.json(),
       data = parsedRes.data;
-    let suggestionItem = document.createElement("div");
-    suggestionItem.classList.add("suggestionItem");
 
     //remove all elements from suggestions
     suggestions.innerHTML = "";
     if (data.length === 0) {
       suggestionItem.classList.add("error");
-      suggestionItem.innerText = "No Rsults";
+      suggestionItem.innerText = "No Results";
       suggestions.appendChild(suggestionItem);
     } else {
-      listItems = data.reduce((result, item) => {
-        result += `<div class="suggestionItem">${item.name}</div>`;
+      data.forEach((item) => {
+        suggestionItem.innerHTML += `<div class="suggestionItem">${item.name}</div>`;
+        suggestions.appendChild(suggestionItem);
+      });
 
-        return result;
-      }, "");
-      suggestions.innerHTML = listItems;
+      suggestionItem.addEventListener("click", async (e) => {
+        const chosenCity = data.filter(
+          (city) => city.name === e.target.innerText
+        );
+        selectedCity.innerText = chosenCity[0].name;
+        selectedWeather.innerText = chosenCity[0].weather;
+        selectedStatus.innerText = chosenCity[0].status;
+      });
+
+      window.addEventListener("click", () => {
+        suggestions.innerHTML = "";
+      });
     }
   } catch (err) {
     console.log(err);
@@ -45,6 +55,9 @@ Weather.prototype.updateSuggestions = function () {};
 Weather.prototype.reset = function () {
   document.getElementById("city").value = "";
   suggestions.innerHTML = "";
+  selectedCity.innerHTML = "";
+  selectedWeather.innerHTML = "";
+  this.$selectedStatus.innerHTML = "";
 };
 
 Weather.prototype.init = function () {
@@ -54,7 +67,7 @@ Weather.prototype.init = function () {
   this.$suggestions = document.getElementById("suggestions");
   this.$selectedInfo = document.getElementById("selectedCityInfo");
   this.$selectedCity = document.getElementById("selectedCity");
-  this.$selctedWeather = document.getElementById("selctedWeather");
+  this.$selectedWeather = document.getElementById("selectedWeather");
   this.$selectedStatus = document.getElementById("selectedStatus");
   this.$resetBtn = document.getElementById("resetBtn");
   this.$city.addEventListener("keyup", this.onKeyup.bind(this));
