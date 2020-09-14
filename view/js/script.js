@@ -25,8 +25,6 @@ Weather.prototype.fetchResults = async function (val) {
       }, "");
       suggestions.innerHTML = listItems;
     }
-
-    console.log(parsedRes);
   } catch (err) {
     console.log(err);
   }
@@ -44,7 +42,10 @@ Weather.prototype.updatecitySelect = function (results) {};
 
 Weather.prototype.updateSuggestions = function () {};
 
-Weather.prototype.reset = function () {};
+Weather.prototype.reset = function () {
+  document.getElementById("city").value = "";
+  suggestions.innerHTML = "";
+};
 
 Weather.prototype.init = function () {
   this.timer = null;
