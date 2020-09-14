@@ -1,7 +1,5 @@
 function Weather() {}
 
-let suggestionItem = document.createElement("div");
-suggestionItem.classList.add("suggestionItem");
 Weather.prototype.fetchResults = async function (val) {
   try {
     const res = await fetch(
@@ -9,32 +7,10 @@ Weather.prototype.fetchResults = async function (val) {
       ),
       parsedRes = await res.json(),
       data = parsedRes.data;
-
-    //remove all elements from suggestions
-    suggestions.innerHTML = "";
-    if (data.length === 0) {
-      suggestionItem.classList.add("error");
-      suggestionItem.innerText = "No Results";
-      suggestions.appendChild(suggestionItem);
-    } else {
-      data.forEach((item) => {
-        suggestionItem.innerHTML += `<div class="suggestionItem">${item.name}</div>`;
-        suggestions.appendChild(suggestionItem);
-      });
-
-      suggestionItem.addEventListener("click", async (e) => {
-        const chosenCity = data.filter(
-          (city) => city.name === e.target.innerText
-        );
-        selectedCity.innerText = chosenCity[0].name;
-        selectedWeather.innerText = chosenCity[0].weather;
-        selectedStatus.innerText = chosenCity[0].status;
-      });
-
-      window.addEventListener("click", () => {
-        suggestions.innerHTML = "";
-      });
-    }
+    this.updateSuggestions(data);
+    window.addEventListener("click", () => {
+      suggestions.innerHTML = "";
+    });
   } catch (err) {
     console.log(err);
   }
@@ -48,9 +24,33 @@ Weather.prototype.onKeyup = function (e) {
   }, 1000);
 };
 
-Weather.prototype.updatecitySelect = function (results) {};
+Weather.prototype.updatecitySelect = function ({ results, city }) {
+  const chosenCity = results.find((el) => el.name === city);
+  selectedCity.innerText = chosenCity.name;
+  selectedWeather.innerText = chosenCity.weather;
+  selectedStatus.innerText = chosenCity.status;
+};
 
-Weather.prototype.updateSuggestions = function () {};
+Weather.prototype.updateSuggestions = function (data) {
+  let suggestionItem = document.createElement("div");
+  suggestionItem.classList.add("suggestionItem");
+  //remove all elements from suggestions
+  suggestions.innerHTML = "";
+  if (data.length === 0) {
+    suggestionItem.classList.add("error");
+    suggestionItem.innerText = "No Results";
+    suggestions.appendChild(suggestionItem);
+  } else {
+    data.forEach((item) => {
+      suggestionItem.innerHTML += `<div class="suggestionItem">${item.name}</div>`;
+      suggestions.appendChild(suggestionItem);
+    });
+
+    suggestionItem.addEventListener("click", async (e) => {
+      this.updatecitySelect({ results: data, city: e.target.innerText });
+    });
+  }
+};
 
 Weather.prototype.reset = function () {
   document.getElementById("city").value = "";
